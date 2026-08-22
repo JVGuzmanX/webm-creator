@@ -29,9 +29,13 @@ function getErrorMessage(error) {
 
 async function imageAsJpeg(file) {
     const image = await createImageBitmap(file);
-    const scale = Math.min(1, 1280 / image.width, 720 / image.height);
-    const width = Math.max(1, Math.round(image.width * scale));
-    const height = Math.max(1, Math.round(image.height * scale));
+    const originalWidth = image.width;
+    const originalHeight = image.height;
+    const longestSide = Math.max(originalWidth, originalHeight);
+    const scale = Math.min(1, 1280 / longestSide);
+    const width = Math.max(2, Math.floor(originalWidth * scale / 2) * 2);
+    const height = Math.max(2, Math.floor(originalHeight * scale / 2) * 2);
+    addLog(`Image dimensions: ${originalWidth}x${originalHeight} → ${width}x${height}`);
     const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
@@ -94,9 +98,9 @@ convertButton.addEventListener("click", async () => {
         await loadFFmpeg();
         setStatus("Preparing image…");
         await ffmpeg.writeFile("input.jpg", await imageAsJpeg(file));
-        addLog("Running: -loop 1 -i input.jpg -t 2 -r 30 -c:v libvpx-vp9 -pix_fmt yuv420p -an output.webm");
+        addLog("Running: -loop 1 -i input.jpg -t 2 -r 30 -c:v libvpx -threads 1 -pix_fmt yuv420p -an output.webm");
         setStatus("Converting image to a 2-second WebM…");
-        await ffmpeg.exec(["-loop", "1", "-i", "input.jpg", "-t", "2", "-r", "30", "-c:v", "libvpx-vp9", "-pix_fmt", "yuv420p", "-an", "output.webm"]);
+        await ffmpeg.exec(["-loop", "1", "-i", "input.jpg", "-t", "2", "-r", "30", "-c:v", "libvpx", "-threads", "1", "-pix_fmt", "yuv420p", "-an", "output.webm"]);
         const data = await ffmpeg.readFile("output.webm");
         if (outputURL) URL.revokeObjectURL(outputURL);
         outputURL = URL.createObjectURL(new Blob([data.buffer], { type: "video/webm" }));
