@@ -1,0 +1,8 @@
+{
+  "name": "WebM Video Creator",
+  "short_name": "WebM Creator",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#090d18",
+  "theme_color": "#111827"
+}
