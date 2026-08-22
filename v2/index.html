@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WebM Creator V2</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="shell">
+    <p class="eyebrow">WebM Creator</p>
+    <h1>One image. Two seconds.</h1>
+    <p class="intro">A small, single-thread WebM conversion proof of concept.</p>
+
+    <section class="workspace" aria-labelledby="input-heading">
+      <h2 id="input-heading">Choose an image</h2>
+      <label class="dropzone" for="image-input">
+        <span class="dropzone-title">JPG, PNG, or WebP</span>
+        <span class="dropzone-hint">Select one image to begin</span>
+        <input id="image-input" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp">
+      </label>
+      <p id="file-name" class="file-name">No image selected.</p>
+      <button id="convert" type="button" disabled>Convert to WebM</button>
+      <div id="status" class="status" role="status" aria-live="polite">Ready.</div>
+      <pre id="logs" class="logs" aria-label="FFmpeg output" hidden></pre>
+    </section>
+
+    <section id="result-panel" class="result" aria-labelledby="result-heading" hidden>
+      <h2 id="result-heading">Your WebM</h2>
+      <video id="result" controls loop></video>
+      <a id="download" class="download" download="image-2-seconds.webm">Download WebM</a>
+    </section>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
